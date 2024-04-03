@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Controleur des formations
@@ -211,7 +210,7 @@ class FormationsController extends AbstractController
     }
 
     /**
-     * @Route("/admin/formations/delete/{id}", name="admin.formations.delete")
+     * @Route("/admin/formations/delete/{id}", name="admin.formations.delete", methods={"GET"})
      * @param Int $id
      * @return Response
      */
