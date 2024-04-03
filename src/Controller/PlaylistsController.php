@@ -69,14 +69,52 @@ class PlaylistsController extends AbstractController
      */
     public function sort($champ, $ordre): Response
     {
-        if ($champ == "name") {
-            $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+        switch ($champ) {
+            case 'name':
+                $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+                break;
+            case 'formations':
+                $playlists = $this->playlistRepository->findAllOrderByName('ASC');
+                $this->sortPlaylists($playlists, $ordre);
+                break;
+            default:
+                break;
         }
         $categories = $this->categorieRepository->findAll();
         return $this->render(self::PAGE_PLAYLISTS, [
             'playlists' => $playlists,
             'categories' => $categories
         ]);
+    }
+
+    private function sortPlaylists(array &$playlists, $ordre)
+    {
+        switch ($ordre) {
+            case 'DESC':
+                usort($playlists, function ($a, $b) {
+                    $countA = count($a->getFormations());
+                    $countB = count($b->getFormations());
+
+                    if ($countA == $countB) {
+                        return 0;
+                    }
+                    return ($countA > $countB) ? -1 : 1;
+                });
+                break;
+            case 'ASC':
+                usort($playlists, function ($a, $b) {
+                    $countA = count($a->getFormations());
+                    $countB = count($b->getFormations());
+
+                    if ($countA == $countB) {
+                        return 0;
+                    }
+                    return ($countA < $countB) ? -1 : 1;
+                });
+                break;
+            default:
+                break;
+        }
     }
 
     /**
